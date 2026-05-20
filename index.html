@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eterrion - Card Gallery & Lore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1 class="logo">CARD LIST</h1>
+        <div class="filter-bar">
+            <input type="text" id="searchBar" placeholder="Buscar carta...">
+            <select id="filterReino">
+                <option value="all">Reino</option>
+                <option value="Aric">Aric</option>
+                <option value="Aystar">Aystar</option>
+                <option value="Breesh">Breesh</option>
+                <option value="Cahl'ama">Cahl'ama</option>
+                <option value="Daelum">Daelum</option>
+                <option value="Elenaria">Elenaria</option>
+                <option value="Ignis">Ignis</option>
+                <option value="Mo'lah">Mo'lah</option>
+                <option value="Ventaris">Ventaris</option>
+                <option value="Zelphyd">Zelphyd</option>
+            </select>
+            <select id="filterClase">
+                <option value="all">Clase</option>
+                <option value="Bestia">Bestia</option>
+                <option value="Brujo">Brujo</option>
+                <option value="Domador">Domador</option>
+                <option value="Dragón">Dragón</option>
+                <option value="Elfo">Elfo</option>
+                <option value="Erudito">Erudito</option>
+                <option value="Explorador">Explorador</option>
+                <option value="Gnomo">Gnomo</option>
+                <option value="Golem">Golem</option>
+                <option value="Guardián">Guardián</option>
+                <option value="Guerrero">Guerrero</option>
+                <option value="Hada">Hada</option>
+                <option value="Hito">Hito</option>
+                <option value="Invocador">Invocador</option>
+                <option value="Mutante">Mutante</option>
+                <option value="Pirata">Pirata</option>
+                <option value="Sacerdote">Sacerdote</option>
+                <option value="Sombrío">Sombrío</option>
+                <option value="Titán">Titán</option>
+                <option value="Vampiro">Vampiro</option>
+            </select>
+            <select id="filterHabilidad">
+                <option value="all">Habilidad</option>
+                <option value="Desafío">Desafío</option>
+                <option value="Dominante">Dominante</option>
+                <option value="Firmeza">Firmeza</option>
+                <option value="Furia">Furia</option>
+                <option value="Sigilo">Sigilo</option>
+                <option value="Toque mortal">Toque mortal</option>
+                <option value="Veloz">Veloz</option>
+            </select>
+            <select id="filterFuerza">
+                <option value="all">Fuerza</option>
+                <option value="0-3">Fuerza 0 - 3</option>
+                <option value="4-6">Fuerza 4 - 6</option>
+                <option value="7+">Fuerza 7+</option>
+            </select>
+        </div>
+    </header>
+
+    <main id="card-display" class="card-grid"></main>
+
+    <div id="card-modal" class="modal">
+        <div class="modal-content profile-mode">
+            <span class="close-btn">&times;</span>
+            
+            <div class="character-bg" id="modal-bg-art"></div>
+
+            <div class="modal-body">
+                <div class="modal-card-side">
+                    <img id="modal-img" src="" alt="Carta">
+                </div>
+
+                <div class="modal-info-side">
+                    <div class="header-info">
+                        <img id="modal-reino-icon" src="" class="reino-icon" alt="Reino">
+                        <div>
+                            <h2 id="modal-name"></h2>
+                            <p id="modal-tags"></p>
+                        </div>
+                    </div>
+
+                    <div class="stats-bar">
+                        <div class="stat-box"><span>FUERZA</span><br><b id="modal-fuerza"></b></div>
+                        <div class="stat-box"><span>RAREZA</span><br><b id="modal-rareza"></b></div>
+                    </div>
+
+                    <div class="abilities-container">
+                        <div class="ability-item">
+                            <img src="img/iconos/habilidad_icon.png" class="mini-icon" onerror="this.style.display='none'">
+                            <div>
+                                <h4 id="modal-tecnica-tit"></h4>
+                                <p id="modal-tecnica-desc"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lore-box">
+                        <h4>HISTORIA</h4>
+                        <p id="modal-lore"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="datos.js"></script> 
+    <script src="script.js"></script>
+</body>
+</html>
