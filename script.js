@@ -37,6 +37,7 @@ function renderCards(lista) {
         return indexA - indexB;
     });
 
+    let animationIndex = 0;
     rarezasPresentes.forEach(rareza => {
         // Título de la rareza
         const titulo = document.createElement('h2');
@@ -48,6 +49,9 @@ function renderCards(lista) {
         cartasPorRareza[rareza].forEach(carta => {
             const div = document.createElement('div');
             div.className = 'card-item';
+            div.style.animationDelay = `${(animationIndex % 30) * 0.05}s`;
+            animationIndex++;
+
             if (carta.clase === 'Hito') {
                 div.classList.add('hito');
             }
@@ -86,9 +90,27 @@ function openModal(carta) {
     document.getElementById("modal-tags").innerText = `${carta.reino} | ${carta.clase}`;
     document.getElementById("modal-fuerza").innerText = carta.fuerza;
     document.getElementById("modal-rareza").innerText = carta.rareza;
-    document.getElementById("modal-tecnica-tit").innerText = carta.tecnica_1;
-    document.getElementById("modal-tecnica-desc").innerText = carta.expl_tec_1;
-    document.getElementById("modal-lore").innerText = carta.lore;
+    document.getElementById('modal-tecnica-tit').innerText = carta.tecnica_1;
+    document.getElementById('modal-tecnica-desc').innerText = carta.expl_tec_1;
+    document.getElementById('modal-lore').innerText = carta.lore;
+
+    // Habilidades (Keywords)
+    const habContainer = document.getElementById('modal-habilidades');
+    habContainer.innerHTML = '';
+    if (carta.habilidad_1 && carta.habilidad_1 !== "") {
+        habContainer.innerHTML += `
+            <div class="hab-badge">
+                <img src="img/iconos/${carta.habilidad_1}.png" onerror="this.style.display='none'">
+                <span>${carta.habilidad_1}</span>
+            </div>`;
+    }
+    if (carta.habilidad_2 && carta.habilidad_2 !== "") {
+        habContainer.innerHTML += `
+            <div class="hab-badge">
+                <img src="img/iconos/${carta.habilidad_2}.png" onerror="this.style.display='none'">
+                <span>${carta.habilidad_2}</span>
+            </div>`;
+    }
 
     modal.classList.add("show");
     document.body.classList.add("modal-open"); // Bloquea scroll fondo
@@ -146,11 +168,72 @@ function filtrar() {
     renderCards(filtradas);
 }
 
-searchBar.oninput = filtrar;
-filterReino.onchange = filtrar;
-filterClase.onchange = filtrar;
-filterHabilidad.onchange = filtrar;
-filterFuerza.onchange = filtrar;
+searchBar.addEventListener('input', filtrar);
+filterReino.addEventListener('change', filtrar);
+filterClase.addEventListener('change', filtrar);
+filterHabilidad.addEventListener('change', filtrar);
+filterFuerza.addEventListener('change', filtrar);
+
+// --- CUSTOM SELECT LOGIC (Permite imágenes en selects) ---
+function createCustomSelect(selectId, hasIcons) {
+    const select = document.getElementById(selectId);
+    select.style.display = 'none';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'custom-select-wrapper';
+
+    const trigger = document.createElement('div');
+    trigger.className = 'custom-select';
+    
+    const selectedOption = select.options[select.selectedIndex];
+    trigger.innerHTML = `<span class="selected-text">${getOptionHTML(selectedOption, hasIcons)}</span>`;
+
+    const optionsContainer = document.createElement('div');
+    optionsContainer.className = 'custom-options';
+
+    Array.from(select.options).forEach(opt => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'custom-option';
+        optionDiv.innerHTML = getOptionHTML(opt, hasIcons);
+        
+        optionDiv.addEventListener('click', () => {
+            select.value = opt.value;
+            trigger.querySelector('.selected-text').innerHTML = getOptionHTML(opt, hasIcons);
+            wrapper.classList.remove('open');
+            select.dispatchEvent(new Event('change'));
+        });
+        optionsContainer.appendChild(optionDiv);
+    });
+
+    wrapper.appendChild(trigger);
+    wrapper.appendChild(optionsContainer);
+    select.parentNode.insertBefore(wrapper, select.nextSibling);
+
+    trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = wrapper.classList.contains('open');
+        document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
+        if (!isOpen) wrapper.classList.add('open');
+    });
+}
+
+function getOptionHTML(opt, hasIcons) {
+    if (hasIcons && opt.value !== "all") {
+        return `<img src="img/iconos/${opt.value}.png" class="filter-icon" onerror="this.style.display='none'"> <span>${opt.text}</span>`;
+    }
+    return `<span>${opt.text}</span>`;
+}
+
+// Cierra los menús si haces clic fuera
+document.addEventListener('click', () => {
+    document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
+});
+
+// Inicializar menús
+createCustomSelect('filterReino', true);
+createCustomSelect('filterHabilidad', true);
+createCustomSelect('filterClase', false);
+createCustomSelect('filterFuerza', false);
 
 // Inicio
 renderCards(cartasEterrion);
